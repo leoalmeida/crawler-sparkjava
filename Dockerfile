@@ -1,6 +1,6 @@
-FROM maven:3.6.3-jdk-14
+FROM maven:3.8.5-openjdk-17-slim
 
 ADD . /usr/src/sparkjava
 WORKDIR /usr/src/sparkjava
-EXPOSE 4567
-ENTRYPOINT ["mvn", "clean", "verify", "exec:java"]
+EXPOSE 8081
+ENTRYPOINT ["mvn", "clean", "install", "exec:java"]

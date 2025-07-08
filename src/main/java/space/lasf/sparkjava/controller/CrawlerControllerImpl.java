@@ -46,7 +46,7 @@ public class CrawlerControllerImpl implements ControllerInterface<CrawlerDto> {
     public void process(String crawlerUrl, String id) {
         LOGGER.info("Starting crawl for request ID: {}", id);
         crawlerHandler.crawlResource(crawlerUrl, id);
-        LOGGER.info("Crawl process finished for request ID: {}", id);
+        LOGGER.info("Crawl process submitted for request ID: {}", id);
 	}
 
     /**

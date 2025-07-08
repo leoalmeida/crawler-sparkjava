@@ -26,7 +26,7 @@ import static spark.Spark.port;
 public class Main {
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
     private static final String ENV_PORT = "PORT";
-    private static final int DEFAULT_PORT = 4567;
+    private static final int DEFAULT_PORT = 8081;
 
     private final ControllerInterface<CrawlerDto> crawlerController;
     private final ExecutorService executorService;
