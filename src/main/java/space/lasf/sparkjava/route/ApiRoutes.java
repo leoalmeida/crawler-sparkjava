@@ -64,15 +64,33 @@ public final class ApiRoutes {
      */
     private static void setupCrawlerEndpoints(
             final ControllerInterface<CrawlerDto> controller, final ExecutorService executorService) {
+        registerPostCrawl(controller, executorService);
+        registerGetCrawlById(controller);
+        registerGetCrawls(controller);
+    }
+
+    private static void registerPostCrawl(
+            final ControllerInterface<CrawlerDto> controller,
+            final ExecutorService executorService) {
         post(
                 "/crawl",
                 (req, res) -> {
-                    CrawlerDto crawler = controller.create(runPost(req, res));
+                    String baseUrl = resolveBaseUrl();
+                    if (baseUrl == null || baseUrl.isBlank()) {
+                        throw new ServerConfigurationException(
+                                "Server configuration error: BASE_URL environment variable not set.");
+                    }
+
+                    res.type("application/json");
+                    String keyword = getBodyKeyword(req, GSON);
+                    CrawlerDto crawler = controller.create(keyword);
                     executorService.submit(() -> controller.process(baseUrl, crawler.getId()));
                     return Map.of("id", crawler.getId());
                 },
                 GSON::toJson);
+    }
 
+    private static void registerGetCrawlById(final ControllerInterface<CrawlerDto> controller) {
         get(
                 "/crawl/:id",
                 (req, res) -> {
@@ -80,7 +98,9 @@ public final class ApiRoutes {
                     return controller.findById(getParamId(req));
                 },
                 GSON::toJson);
+    }
 
+    private static void registerGetCrawls(final ControllerInterface<CrawlerDto> controller) {
         get(
                 "/crawl",
                 (req, res) -> {
@@ -88,17 +108,6 @@ public final class ApiRoutes {
                     return controller.findAll();
                 },
                 GSON::toJson);
-    }
-
-    private static String runPost(final Request req, final Response res) {
-        String baseUrl = resolveBaseUrl();
-        if (baseUrl == null || baseUrl.isBlank()) {
-            throw new ServerConfigurationException(
-                    "Server configuration error: BASE_URL environment variable not set.");
-        }
-        res.type("application/json");
-        String keyword = getBodyKeyword(req, GSON);
-        return keyword;
     }
 
     private static String resolveBaseUrl() {
