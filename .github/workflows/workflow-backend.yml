@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  workflow_call:
+
+jobs:
+  #code-quality-backend:
+  #  uses: ./.github/workflows/code-quality.yml
+  #  secrets: inherit
+  
+  #test-backend:
+  #  needs: [code-quality-backend]
+  #  uses: ./.github/workflows/testes-backend.yml
+  #  secrets: inherit
+
+  build-backend:
+    #needs: [test-backend]
+    uses: ./.github/workflows/build-backend.yml
+    secrets: inherit
+
+#zap-scan:
+  #  needs: build-project
+  #  uses: ./.github/workflows/zapscan.yml
+  #  secrets: inherit
+  
+  #docker:
+  #  needs: zap-scan
+  #  uses: ./.github/workflows/docker.yml
+  #  secrets: inherit
+  
+  #deploy_google:
+  #  needs: docker
+  #  uses: ./.github/workflows/release-gcloud.yml
+  #  secrets: inherit

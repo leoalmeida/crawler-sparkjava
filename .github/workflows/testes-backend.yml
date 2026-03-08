@@ -1,0 +1,42 @@
+name: Execução de testes dos artefatos de Backend do projeto
+
+on:
+  workflow_call:
+
+jobs:
+  test-backend:
+    name: Execute Unit tests for Backend Module
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Compile Backend Module
+        run: mvn -B -f ./pom.xml clean package -DskipTests
+      - name: Run Backend-Module BeneficioEjbIntegrationTest
+        run: mvn -B -f ./pom.xml -Dtest=BeneficioEjbIntegrationTest test
+      - name: Run Backend-Module BeneficioRepositoryIntegrationTest
+        run: mvn -B -f ./pom.xml -Dtest=BeneficioRepositoryIntegrationTest test
+      - name: Run Backend-Module TransferenciaServiceTest
+        run: mvn -B -f ./pom.xml -Dtest=TransferenciaServiceTest test
+      - name: Run Backend-Module BeneficioControllerTest
+        run: mvn -B -f ./pom.xml -Dtest=BeneficioControllerTest test
+      - name: Run Backend-Module BackendApplicationTests
+        run: mvn -B -f ./pom.xml -Dtest=BackendApplicationTests test
+
+      - name: Run Code Quality Analysis
+        run: mvn -B -f ./pom.xml jacoco:report
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-report
+          path: ./target/site/jacoco/
+          retention-days: 1
