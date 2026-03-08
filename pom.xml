@@ -49,6 +49,14 @@
             <version>5.18.0</version>
             <scope>test</scope>
         </dependency>
+        
+		<!-- Code Quality Plugins -->
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-project-info-reports-plugin</artifactId>
+			<version>3.9.0</version>
+			<type>maven-plugin</type>
+		</dependency>
     </dependencies>
 
     <build>

@@ -1,16 +1,16 @@
 package space.lasf.sparkjava.helper;
 
-import com.google.gson.Gson;
-import org.junit.jupiter.api.Test;
-import spark.Request;
-import space.lasf.sparkjava.exception.InvalidRequestException;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.Test;
+import space.lasf.sparkjava.exception.InvalidRequestException;
+import spark.Request;
 
 class RequestUtilTest {
 

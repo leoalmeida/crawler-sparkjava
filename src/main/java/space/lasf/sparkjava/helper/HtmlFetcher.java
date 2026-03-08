@@ -1,7 +1,5 @@
 package space.lasf.sparkjava.helper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,6 +13,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A utility for fetching HTML content and extracting links without external libraries.
@@ -35,7 +35,7 @@ public final class HtmlFetcher {
     /**
      * Fetches the HTML content from a given URL string.
      */
-    public static String getHtmlContent(String urlString) throws IOException {
+    public static String getHtmlContent(final String urlString) throws IOException {
         URL url = new URL(urlString);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
@@ -43,7 +43,8 @@ public final class HtmlFetcher {
         connection.setConnectTimeout(TIMEOUT_MS);
         connection.setReadTimeout(TIMEOUT_MS);
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader =
+                new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
             return reader.lines().collect(Collectors.joining(System.lineSeparator()));
         } finally {
             connection.disconnect();
@@ -53,13 +54,14 @@ public final class HtmlFetcher {
     /**
      * Extracts all link URLs from an HTML string using regex.
      */
-    public static List<String> getlinks(String html) {
+    public static List<String> getlinks(final String html) {
         List<String> links = new ArrayList<>();
         Matcher matcher = LINK_PATTERN.matcher(html);
         while (matcher.find()) {
             String link = matcher.group(1).replace("../", "");
-            if (!link.startsWith("mailto:") && !link.startsWith("javascript:") && !link.contains("#"))
+            if (!link.startsWith("mailto:") && !link.startsWith("javascript:") && !link.contains("#")) {
                 links.add(link);
+            }
         }
         return links;
     }
@@ -67,13 +69,18 @@ public final class HtmlFetcher {
     /**
      * Resolves a potentially relative link against a base URL.
      */
-    public static String resolve(String baseUrl, String link) {
+    public static String resolve(final String baseUrl, final String link) {
         try {
             URI baseUri = new URI(baseUrl);
             URI resolvedUri = baseUri.resolve(link);
             // Clean up fragment (#) from the URL
-            return new URI(resolvedUri.getScheme(), resolvedUri.getAuthority(), resolvedUri.getPath(),
-                    resolvedUri.getQuery(), null).toString();
+            return new URI(
+                            resolvedUri.getScheme(),
+                            resolvedUri.getAuthority(),
+                            resolvedUri.getPath(),
+                            resolvedUri.getQuery(),
+                            null)
+                    .toString();
         } catch (URISyntaxException e) {
             LOGGER.warn("Could not resolve link '{}' against base '{}'. Reason: {}", link, baseUrl, e.getMessage());
             // Could not parse the URI, return an invalid string to be filtered out later

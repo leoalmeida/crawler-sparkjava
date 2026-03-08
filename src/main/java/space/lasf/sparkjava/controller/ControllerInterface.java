@@ -1,9 +1,8 @@
 package space.lasf.sparkjava.controller;
 
+import java.util.List;
 import space.lasf.sparkjava.exception.InvalidRequestException;
 import space.lasf.sparkjava.exception.ResourceNotFoundException;
-
-import java.util.List;
 
 /**
  * Defines the contract for a generic resource controller.
@@ -17,7 +16,7 @@ public interface ControllerInterface<T> {
      * @param base The base value to start processing from.
      * @param id The ID of resource that should be processed.
      */
-    void process(String base, String id);
+    void process(final String base, final String id);
 
     /**
      * Validates input and creates a new resource.
@@ -26,7 +25,7 @@ public interface ControllerInterface<T> {
      * @return The newly created object instance.
      * @throws InvalidRequestException if the keyword is invalid.
      */
-    T create(String keyword);
+    T create(final String keyword);
 
     /**
      * Finds a resource by its ID and returns its data transfer object.
@@ -35,7 +34,7 @@ public interface ControllerInterface<T> {
      * @return A {@link T} representing the state of the resource.
      * @throws ResourceNotFoundException if no resource with the given ID is found.
      */
-    T findById(String id);
+    T findById(final String id);
 
     /**
      * Retrieves all resources.

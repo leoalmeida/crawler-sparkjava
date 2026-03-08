@@ -1,16 +1,15 @@
 package space.lasf.sparkjava.dao;
 
-import org.junit.jupiter.api.Test;
-import space.lasf.sparkjava.entity.Crawler;
-import space.lasf.sparkjava.entity.Status;
-
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import space.lasf.sparkjava.entity.Crawler;
+import space.lasf.sparkjava.entity.Status;
 
 class CrawlerDaoTest {
 

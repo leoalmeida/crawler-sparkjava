@@ -1,19 +1,17 @@
 package space.lasf.sparkjava.dao;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import space.lasf.sparkjava.entity.Crawler;
-import space.lasf.sparkjava.entity.Status;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import space.lasf.sparkjava.entity.Crawler;
+import space.lasf.sparkjava.entity.Status;
 
 /**
  * Data Access Object (DAO) for managing Crawler instances.
@@ -28,8 +26,7 @@ public class CrawlerDao implements DaoInterface<Crawler> {
     private static final int ID_LENGTH = 8;
     private static final String ID_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-
-    public Crawler findById(String id){
+    public Crawler findById(final String id) {
         return crawlerMap.get(id);
     }
 
@@ -40,7 +37,7 @@ public class CrawlerDao implements DaoInterface<Crawler> {
      * @param keyword The keyword for the new crawl request.
      * @return The newly created and initialized Crawler instance.
      */
-    public Crawler create(String keyword) {
+    public Crawler create(final String keyword) {
         String randomCode = generateRandomCode();
         Crawler request = new Crawler(randomCode, keyword);
         crawlerMap.put(request.getId(), request);
@@ -48,13 +45,13 @@ public class CrawlerDao implements DaoInterface<Crawler> {
         return request;
     }
 
-    public List<Crawler> findAll(){
+    public List<Crawler> findAll() {
         // Return a copy to prevent modification of the underlying values collection
         return new ArrayList<>(crawlerMap.values());
     }
 
     @Override
-    public void changeStatus(String id, Status status) {
+    public void changeStatus(final String id, final Status status) {
         switch (status) {
             case ERROR:
                 errorProcessing(id);
@@ -68,15 +65,15 @@ public class CrawlerDao implements DaoInterface<Crawler> {
     }
 
     @Override
-    public void appendAll(String id, List<String> values) {
+    public void appendAll(final String id, final List<String> values) {
         Optional.ofNullable(crawlerMap.get(id)).ifPresent(crawler -> crawler.addLinks(values));
     }
 
-    private void endProcessing(String id) {
+    private void endProcessing(final String id) {
         Optional.ofNullable(crawlerMap.get(id)).ifPresent(Crawler::endProcess);
     }
-    
-    private void errorProcessing(String id) {
+
+    private void errorProcessing(final String id) {
         Optional.ofNullable(crawlerMap.get(id)).ifPresent(Crawler::errorProcess);
     }
 
@@ -87,7 +84,9 @@ public class CrawlerDao implements DaoInterface<Crawler> {
         try {
             random = SecureRandom.getInstanceStrong();
         } catch (NoSuchAlgorithmException e) {
-            LOGGER.warn("Could not get SecureRandom instance, falling back to standard Random. This is not recommended for production.");
+            LOGGER.warn("Could not get SecureRandom instance, "
+                    + "falling back to standard Random. "
+                    + "This is not recommended for production.");
             random = new Random();
         }
 

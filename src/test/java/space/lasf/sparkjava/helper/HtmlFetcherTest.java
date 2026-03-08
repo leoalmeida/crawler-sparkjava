@@ -1,17 +1,16 @@
 package space.lasf.sparkjava.helper;
 
-import com.sun.net.httpserver.HttpServer;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 class HtmlFetcherTest {
 
@@ -26,7 +25,8 @@ class HtmlFetcherTest {
 
     @Test
     void getlinksShouldExtractValidLinksAndIgnoreMailtoJavascriptAndFragments() {
-        String html = """
+        String html =
+                """
             <html>
               <a href=\"/docs\">Docs</a>
               <a href=\"../api\">Api</a>

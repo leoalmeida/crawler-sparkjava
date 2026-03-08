@@ -1,23 +1,21 @@
 package space.lasf.sparkjava;
 
+import static spark.Spark.port;
+
+import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import space.lasf.sparkjava.controller.ControllerInterface;
+import space.lasf.sparkjava.controller.CrawlerControllerImpl;
 import space.lasf.sparkjava.dao.CrawlerDao;
 import space.lasf.sparkjava.dao.DaoInterface;
 import space.lasf.sparkjava.dto.CrawlerDto;
 import space.lasf.sparkjava.entity.Crawler;
 import space.lasf.sparkjava.handler.CrawlerHandler;
 import space.lasf.sparkjava.route.ApiRoutes;
-import space.lasf.sparkjava.controller.ControllerInterface;
-import space.lasf.sparkjava.controller.CrawlerControllerImpl;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import static spark.Spark.port;
 
 /**
  * Main application class for the web crawler service.
@@ -27,6 +25,7 @@ public class Main {
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
     private static final String ENV_PORT = "PORT";
     private static final int DEFAULT_PORT = 8081;
+    private static final int SHUTDOWN_TIMEOUT_SECONDS = 5;
 
     private final ControllerInterface<CrawlerDto> crawlerController;
     private final ExecutorService executorService;
@@ -42,7 +41,7 @@ public class Main {
         this.crawlerController = new CrawlerControllerImpl(crawlerDao, crawlerHandler);
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         new Main().run();
     }
 
@@ -65,11 +64,11 @@ public class Main {
             executorService.shutdown(); // Disable new tasks from being submitted
             try {
                 // Wait a while for existing tasks to terminate
-                if (!executorService.awaitTermination(5, TimeUnit.SECONDS)) {
+                if (!executorService.awaitTermination(SHUTDOWN_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
                     LOG.warn("Executor did not terminate in the specified time. Forcing shutdown...");
                     executorService.shutdownNow(); // Cancel currently executing tasks
                     // Wait a while for tasks to respond to being cancelled
-                    if (!executorService.awaitTermination(5, TimeUnit.SECONDS)) {
+                    if (!executorService.awaitTermination(SHUTDOWN_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
                         LOG.error("Executor did not terminate even after forceful shutdown.");
                     }
                 }

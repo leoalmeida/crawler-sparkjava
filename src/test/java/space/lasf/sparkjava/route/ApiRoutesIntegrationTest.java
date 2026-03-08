@@ -1,12 +1,13 @@
 package space.lasf.sparkjava.route;
 
-import com.google.gson.Gson;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import space.lasf.sparkjava.controller.ControllerInterface;
-import space.lasf.sparkjava.dto.CrawlerDto;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static spark.Spark.awaitInitialization;
+import static spark.Spark.awaitStop;
+import static spark.Spark.port;
+import static spark.Spark.stop;
 
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,14 +23,11 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import static spark.Spark.awaitInitialization;
-import static spark.Spark.awaitStop;
-import static spark.Spark.port;
-import static spark.Spark.stop;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import space.lasf.sparkjava.controller.ControllerInterface;
+import space.lasf.sparkjava.dto.CrawlerDto;
 
 class ApiRoutesIntegrationTest {
 
@@ -145,8 +143,7 @@ class ApiRoutesIntegrationTest {
         }
     }
 
-    private record HttpResponse(int statusCode, String body) {
-    }
+    private record HttpResponse(int statusCode, String body) {}
 
     private static final class FakeController implements ControllerInterface<CrawlerDto> {
 

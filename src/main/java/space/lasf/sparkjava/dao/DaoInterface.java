@@ -1,7 +1,6 @@
 package space.lasf.sparkjava.dao;
 
 import java.util.List;
-
 import space.lasf.sparkjava.entity.Status;
 
 /**
@@ -16,7 +15,7 @@ public interface DaoInterface<T> {
      * @param id The ID of the object Instance.
      * @return The Object instance, or null if not found.
      */
-    T findById(String id);
+    T findById(final String id);
 
     /**
      * Creates a new object instance, initializes its state to ACTIVE, and stores it.
@@ -24,7 +23,7 @@ public interface DaoInterface<T> {
      * @param keyword The keyword used to start processing request.
      * @return The newly created and initialized Object instance.
      */
-    T create(String keyword);
+    T create(final String keyword);
 
     /**
      * Returns a list of all stored crawler instances.
@@ -39,16 +38,13 @@ public interface DaoInterface<T> {
      * @param id  The ID of the object.
      * @param item The object instance to update.
      */
-    void appendAll(String id, List<String> value);
+    void appendAll(final String id, final List<String> value);
 
-    
     /**
      * Updates an specific object instance data.
      *
      * @param id  The ID of the object.
      * @param status The new status of object instance.
      */
-    void changeStatus(String id, Status status);
-
-
+    void changeStatus(final String id, final Status status);
 }

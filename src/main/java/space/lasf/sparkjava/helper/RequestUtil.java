@@ -1,12 +1,11 @@
 package space.lasf.sparkjava.helper;
 
-import space.lasf.sparkjava.exception.InvalidRequestException;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import spark.Request;
-
 import java.util.Map;
 import java.util.Optional;
+import space.lasf.sparkjava.exception.InvalidRequestException;
+import spark.Request;
 
 /**
  * A utility class for parsing Spark {@link Request} objects.
@@ -28,7 +27,7 @@ public final class RequestUtil {
      * @return The 'id' path parameter.
      * @throws InvalidRequestException if the 'id' parameter is missing or blank.
      */
-    public static String getParamId(Request req) {
+    public static String getParamId(final Request req) {
         String id = req.params(":id");
         if (id == null || id.isBlank()) {
             throw new InvalidRequestException("Path parameter 'id' cannot be missing or blank.");
@@ -45,14 +44,15 @@ public final class RequestUtil {
      * @throws InvalidRequestException if the request body is not valid JSON,
      *                                  or if the 'keyword' field is missing or blank.
      */
-    public static String getBodyKeyword(Request req, Gson gson) {
+    public static String getBodyKeyword(final Request req, final Gson gson) {
         try {
             Map<String, String> bodyMap = gson.fromJson(req.body(), Map.class);
 
             return Optional.ofNullable(bodyMap)
                     .map(body -> body.get("keyword"))
                     .filter(keyword -> !keyword.isBlank())
-                    .orElseThrow(() -> new InvalidRequestException("Request body must contain a non-empty 'keyword' field."));
+                    .orElseThrow(() ->
+                            new InvalidRequestException("Request body must contain a non-empty 'keyword' field."));
         } catch (JsonSyntaxException e) {
             throw new InvalidRequestException("Invalid JSON format in request body.", e);
         }

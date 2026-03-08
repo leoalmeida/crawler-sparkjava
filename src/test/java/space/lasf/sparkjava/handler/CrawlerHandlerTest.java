@@ -1,14 +1,14 @@
 package space.lasf.sparkjava.handler;
 
-import com.sun.net.httpserver.HttpServer;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import space.lasf.sparkjava.dao.DaoInterface;
-import space.lasf.sparkjava.entity.Crawler;
-import space.lasf.sparkjava.entity.Status;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -17,14 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import space.lasf.sparkjava.dao.DaoInterface;
+import space.lasf.sparkjava.entity.Crawler;
+import space.lasf.sparkjava.entity.Status;
 
 class CrawlerHandlerTest {
 
@@ -54,7 +53,8 @@ class CrawlerHandlerTest {
     void crawlResourceShouldAppendMatchedUrlsAndMarkDone() throws IOException {
         server = HttpServer.create(new InetSocketAddress(0), 0);
         server.createContext("/", exchange -> {
-            String html = "<html>java <a href=\"/match\">match</a> <a href=\"/file.pdf\">pdf</a> <a href=\"https://other.site/out\">out</a></html>";
+            String html =
+                    "<html>java <a href=\"/match\">match</a> <a href=\"/file.pdf\">pdf</a> <a href=\"https://other.site/out\">out</a></html>";
             byte[] bytes = html.getBytes(StandardCharsets.UTF_8);
             exchange.sendResponseHeaders(200, bytes.length);
             try (OutputStream os = exchange.getResponseBody()) {

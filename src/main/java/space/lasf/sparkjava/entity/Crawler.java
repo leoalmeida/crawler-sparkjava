@@ -15,14 +15,13 @@ public class Crawler {
     private final String id;
     private final String keyword;
 
-    // Volatile ensures that changes to status are visible across threads.
-    private volatile Status status;
+    private Status status;
 
     // Use a thread-safe Set implementation.
     private final Set<String> urls = ConcurrentHashMap.newKeySet();
 
     private final LocalDateTime startDate;
-    private volatile LocalDateTime lastUpdate;
+    private LocalDateTime lastUpdate;
 
     /**
      * Constructs a new Crawler instance, initializing it to an ACTIVE state.
@@ -30,7 +29,7 @@ public class Crawler {
      * @param id      The unique identifier for this crawl.
      * @param keyword The keyword to search for.
      */
-    public Crawler(String id, String keyword) {
+    public Crawler(final String id, final String keyword) {
         this.id = id;
         this.keyword = keyword;
         this.status = Status.ACTIVE;
@@ -63,7 +62,7 @@ public class Crawler {
      *
      * @param link A list of URLs that was found.
      */
-    public synchronized void addLinks(List<String> link) {
+    public synchronized void addLinks(final List<String> link) {
         if (this.status == Status.ACTIVE) {
             this.urls.addAll(link);
             this.lastUpdate = LocalDateTime.now();
@@ -78,7 +77,7 @@ public class Crawler {
         return keyword;
     }
 
-    public Status getStatus() {
+    public synchronized Status getStatus() {
         return status;
     }
 
@@ -97,19 +96,18 @@ public class Crawler {
     }
 
     // No setter for lastUpdate as it's managed internally
-    public LocalDateTime getLastUpdate() {
+    public synchronized LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
 
     @Override
     public String toString() {
-        return "Crawler{" +
-                "id='" + id + '\'' +
-                ", keyword='" + keyword + '\'' +
-                ", status=" + status +
-                ", urls.size=" + urls.size() +
-                ", startDate=" + startDate +
-                ", lastUpdate=" + lastUpdate +
-                '}';
+        return "Crawler{" + "id='"
+                + id + '\'' + ", keyword='"
+                + keyword + '\'' + ", status="
+                + status + ", urls.size="
+                + urls.size() + ", startDate="
+                + startDate + ", lastUpdate="
+                + lastUpdate + '}';
     }
 }
