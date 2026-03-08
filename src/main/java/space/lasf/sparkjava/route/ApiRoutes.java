@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
 import static space.lasf.sparkjava.helper.RequestUtil.getBodyKeyword;
@@ -54,7 +55,7 @@ public final class ApiRoutes {
      */
     private static void setupCrawlerEndpoints(ControllerInterface<CrawlerDto> controller, ExecutorService executorService) {
         post("/crawl", (req, res) -> {
-            String baseUrl = System.getenv(ENV_BASE_URL);
+            String baseUrl = resolveBaseUrl();
             if (baseUrl == null || baseUrl.isBlank()) {
                 throw new ServerConfigurationException("Server configuration error: BASE_URL environment variable not set.");
             }
@@ -79,6 +80,12 @@ public final class ApiRoutes {
             res.type("application/json");
             return controller.findAll();
         }, GSON::toJson);
+    }
+
+    private static String resolveBaseUrl() {
+        return Optional.ofNullable(System.getenv(ENV_BASE_URL))
+                .filter(value -> !value.isBlank())
+                .orElse(System.getProperty(ENV_BASE_URL));
     }
 
     /**
