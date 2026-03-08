@@ -70,8 +70,7 @@ public final class ApiRoutes {
     }
 
     private static void registerPostCrawl(
-            final ControllerInterface<CrawlerDto> controller,
-            final ExecutorService executorService) {
+            final ControllerInterface<CrawlerDto> controller, final ExecutorService executorService) {
         post(
                 "/crawl",
                 (req, res) -> {
