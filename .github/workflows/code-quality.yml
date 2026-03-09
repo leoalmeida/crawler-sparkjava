@@ -18,8 +18,8 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
       
-      - name: Run Spotless to fix patterns
-        run: mvn -B -f ./pom.xml spotless:apply
+      - name: Run Spotless check
+        run: mvn -B -f ./pom.xml spotless:check
 
       - name: Compile Module
         run: mvn -B -f ./pom.xml clean package -DskipTests
