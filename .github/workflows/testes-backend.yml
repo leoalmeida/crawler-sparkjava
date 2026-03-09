@@ -18,18 +18,11 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Compile Backend Module
-        run: mvn -B -f ./pom.xml clean package -DskipTests
-      - name: Run Backend-Module BeneficioEjbIntegrationTest
-        run: mvn -B -f ./pom.xml -Dtest=BeneficioEjbIntegrationTest test
-      - name: Run Backend-Module BeneficioRepositoryIntegrationTest
-        run: mvn -B -f ./pom.xml -Dtest=BeneficioRepositoryIntegrationTest test
-      - name: Run Backend-Module TransferenciaServiceTest
-        run: mvn -B -f ./pom.xml -Dtest=TransferenciaServiceTest test
-      - name: Run Backend-Module BeneficioControllerTest
-        run: mvn -B -f ./pom.xml -Dtest=BeneficioControllerTest test
-      - name: Run Backend-Module BackendApplicationTests
-        run: mvn -B -f ./pom.xml -Dtest=BackendApplicationTests test
+      - name: Run Tests of Module
+        run: mvn -B -f ./pom.xml test
+
+      - name: Run integrated
+        run: mvn -B -f ./pom.xml verify
 
       - name: Run Code Quality Analysis
         run: mvn -B -f ./pom.xml jacoco:report
