@@ -1,27 +1,32 @@
-name: CI
+name: Workflow de CI
 
-on:
-  workflow_call:
+#on:
+#  workflow_call:
+on: 
+  pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
-  #code-quality-backend:
-  #  uses: ./.github/workflows/code-quality.yml
-  #  secrets: inherit
+  code-quality-backend:
+    uses: ./.github/workflows/code-quality.yml
+    secrets: inherit
   
-  #test-backend:
-  #  needs: [code-quality-backend]
-  #  uses: ./.github/workflows/testes-backend.yml
-  #  secrets: inherit
-
-  build-backend:
-    #needs: [test-backend]
-    uses: ./.github/workflows/build-backend.yml
+  test-backend:
+    needs: [code-quality-backend]
+    uses: ./.github/workflows/testes-backend.yml
     secrets: inherit
 
-#zap-scan:
+  build-backend:
+    needs: [test-backend]
+    uses: ./.github/workflows/build-backend.yml
+    secrets: inherit
+    
+  #zap-scan:
   #  needs: build-project
   #  uses: ./.github/workflows/zapscan.yml
-  #  secrets: inherit
+  #  secrets: inherita
   
   #docker:
   #  needs: zap-scan
