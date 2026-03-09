@@ -18,30 +18,27 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
       
-      - name: Compile EJB Module
-        run: mvn -B -f ejb-module/pom.xml clean install -DskipTests
+      - name: Run Spotless to fix patterns
+        run: mvn -B -f ./pom.xml spotless:apply
 
-      - name: Run Checkstyle
-        run: mvn -B -f backend-module/pom.xml spotless:apply
+      - name: Compile Module
+        run: mvn -B -f ./pom.xml clean package -DskipTests
 
-      - name: Compile Backend Module
-        run: mvn -B -f backend-module/pom.xml clean package -DskipTests
-
-      - name: Run Checkstyle
-        run: mvn -B -f backend-module/pom.xml checkstyle:check
+      - name: Run Checkstyle check
+        run: mvn -B -f ./pom.xml checkstyle:check
 
       - name: Generate Checkstyle report
-        run: mvn -B -f backend-module/pom.xml checkstyle:checkstyle
+        run: mvn -B -f ./pom.xml checkstyle:checkstyle
 
       - name: Run PMD check
-        run: mvn -B -f backend-module/pom.xml pmd:check
+        run: mvn -B -f ./pom.xml pmd:check
 
       - name: generate PMD report
-        run: mvn -B -f backend-module/pom.xml pmd:pmd
+        run: mvn -B -f ./pom.xml pmd:pmd
       
       - name: Run spotbugs check
-        run: mvn -B -f backend-module/pom.xml spotbugs:check
+        run: mvn -B -f ./pom.xml spotbugs:check
 
       - name: Generate SpotBugs report
-        run: mvn -B -f backend-module/pom.xml spotbugs:spotbugs
+        run: mvn -B -f ./pom.xml spotbugs:spotbugs
         
