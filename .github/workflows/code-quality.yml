@@ -36,9 +36,9 @@ jobs:
       - name: generate PMD report
         run: mvn -B -f ./pom.xml pmd:pmd
       
-      #- name: Run spotbugs check
-      #  run: mvn -B -f ./pom.xml spotbugs:check
+      - name: Run spotbugs check
+        run: mvn -B -f ./pom.xml spotbugs:check
 
-      #- name: Generate SpotBugs report
-      #  run: mvn -B -f ./pom.xml spotbugs:spotbugs
+      - name: Generate SpotBugs report
+        run: mvn -B -f ./pom.xml spotbugs:spotbugs
         
