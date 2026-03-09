@@ -26,6 +26,7 @@ public class CrawlerDao implements DaoInterface<Crawler> {
     private static final int ID_LENGTH = 8;
     private static final String ID_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+    @Override
     public Crawler findById(final String id) {
         return crawlerMap.get(id);
     }
@@ -37,6 +38,7 @@ public class CrawlerDao implements DaoInterface<Crawler> {
      * @param keyword The keyword for the new crawl request.
      * @return The newly created and initialized Crawler instance.
      */
+    @Override
     public Crawler create(final String keyword) {
         String randomCode = generateRandomCode();
         Crawler request = new Crawler(randomCode, keyword);
@@ -45,6 +47,7 @@ public class CrawlerDao implements DaoInterface<Crawler> {
         return request;
     }
 
+    @Override
     public List<Crawler> findAll() {
         // Return a copy to prevent modification of the underlying values collection
         return new ArrayList<>(crawlerMap.values());
